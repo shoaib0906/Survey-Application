@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from apps.survey.models import Survey
 from django.core import validators
+
+
 def frontpage(request):
 
     surveys = Survey.objects.all().order_by('id')[:1000]
@@ -19,11 +21,11 @@ def signup(request):
             
             login(request, user)
 
-            return redirect('frontpage')
+            return redirect('dashboard')
     else:
         form = UserCreationForm()
     return render(request, 'core/signup.html', {'form': form})
 
 def accountred(request):
-    return redirect('frontpage')
+    return redirect('dashboard')
 

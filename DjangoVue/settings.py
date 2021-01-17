@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.survey',
     'apps.usrprofile',
     'apps.question',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

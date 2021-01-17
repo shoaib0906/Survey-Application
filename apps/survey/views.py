@@ -8,6 +8,12 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib import messages
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import *
+from .serializers import SurveySerializer
+from rest_framework import viewsets
+
 
 def survey_detail(request, survey_id):
     survey = Survey.objects.get(pk=survey_id)
@@ -16,6 +22,12 @@ def survey_detail(request, survey_id):
 def view_report(request, survey_id):
     surveys = Survey.objects.filter(id=survey_id)
     return render(request, 'question/report.html', {'surveys': surveys})
+
+class SurveyApiView(APIView):
+    def get(self,request):
+        allSurvey=Survey.objects.all().values()
+        return Response({"Message":"List of Survey", "Survey List":allSurvey})
+
 
 @login_required
 def delete_survey(request, survey_id):
