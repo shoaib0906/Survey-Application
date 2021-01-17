@@ -1,0 +1,172 @@
+{% extends 'core/base.html' %}
+{% block content %}
+    <div id="edit-question-app12">
+        <h1 class="title">Survey Question Modification </h1>
+
+        <form method="post" v-on:submit="validateForm">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                {% for error in form.errors %}
+                    <div class="notification is-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% comment %}<div class="notification is-danger" v-if="errors.length">
+                <p v-for="error in errors">
+                    [[ error ]]
+                </p>
+            </div>{% endcomment %}
+            <div class="columns">
+                <div class="column is-6">
+                    <div class="field">
+                <label>Select Survey (Category)</label>
+                <div class="control">
+                    <select name="survey_id" class="input" v-model="survey_id" id="id_survey_id" required>
+                        {% for survey in request.user.surveys.all %}
+                            {% if questions.survey_id|stringformat:"s" == survey.title|stringformat:"s" %}
+                                <option value="{{ survey.id }}" selected="selected"> {{ survey.title }}</option>
+                            {% else %}
+                                <option value="{{ survey.id }}">{{ survey.title }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <label>Ask your Question </label>
+                <div class="control">
+                    <input type="text" class="input " v-model="title"
+                           value="{{ questions.title }}" placeholder='Question you want to ask ??'
+                           name="title" id="id_title" required>
+                </div>
+            </div>
+                </div>
+                <div class="column is-6">
+                    <label>Option [Note: Every Question Must have 2 option and Maximum 10 option can be added] </label>
+                    <div id="optiondiv">
+
+                        <div class="container" >
+                            {% for opt in option %}
+                            <div class='element' id='div_1'>
+                            {% if forloop.first %}
+                                <input type='text' v-model="option" value="{{ opt.option }}" placeholder='Enter Questions Option'
+                                    class="input " name="option" id='txt_1' required>
+                            {% else %}
+                                <input type='text' value="{{ opt.option }}" placeholder='Enter Questions Option'
+                                    class="input " name="option" id='txt_1' >
+                            {% endif %}
+
+                            </div><br>
+                            {% endfor %}
+
+
+
+                            <div class='element' id='div_4'>
+                             <input type='text'  placeholder='Enter Questions Option' class="input is-small" name="option" id='txt_4' >&nbsp;
+                             <br><a class='add button  is-warning is-light'>Add More Option</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <hr>
+            <div class="field ">
+                <div class="buttons has-addons is-right">
+                    <button type="submit" class="button is-success is-light is-right">Update Question </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+{% endblock %}
+{% block scripts %}
+     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+
+ // Add new element
+ $(".add").click(function(){
+
+  // Finding total number of elements added
+  var total_element = $(".element").length;
+
+  // last <div> with element class id
+  var lastid = $(".element:last").attr("id");
+  var split_id = lastid.split("_");
+  var nextindex = Number(split_id[1]) + 1;
+
+  var max = 10;
+  // Check total number elements
+  if(total_element < max ){
+   // Adding new div container after last occurance of element class
+   $(".element:last").after("<div class='element' id='div_"+ nextindex +"'></div>");
+
+   // Adding element to <div>
+   $("#div_" + nextindex).append("<br><input type='text'  placeholder='Enter Questions option' class=\"input\" required name=\"option\" id='txt_"+ nextindex +"'>&nbsp;<span id='remove_" + nextindex + "' class='remove'>X</span>");
+
+  }
+
+ });
+
+ // Remove element
+ $('.container').on('click','.remove',function(){
+
+  var id = this.id;
+  var split_id = id.split("_");
+  var deleteindex = split_id[1];
+
+  // Remove <div> with id
+  $("#div_" + deleteindex).remove();
+
+ });
+});
+    </script>
+
+    <script>
+    const EditQuestionApp = {
+        data() {
+            return {
+
+                errors: []
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+                this.errors = []
+
+                 if (this.title === '') {
+                    this.errors.push('Question is missing ! Please ask the relevant Question')
+                }
+
+                if (this.survey_id === '') {
+                    this.errors.push('Please choose a survey from dropdown')
+                }
+
+                if (this.option === '') {
+                    this.errors.push('The Questions option is missing!Please write 2 option at least.')
+                }
+
+
+
+                if (this.errors.length) {
+                    e.preventDefault()
+
+                    return false
+                } else {
+                    return true
+                }
+            }
+        }
+    }
+
+    Vue.createApp(EditQuestionApp).mount('#edit-question-app');
+</script>
+{% endblock %}

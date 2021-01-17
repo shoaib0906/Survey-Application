@@ -1,0 +1,10 @@
+{% for opt in option %}
+<div class="form-check">
+  <label class="form-check-label">
+    <input type="radio" name="option" class="form-check-input" value="{{ opt.option }}">{{ opt.option }}
+  </label>
+</div>
+
+
+
+{% endfor %}

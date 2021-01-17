@@ -1,0 +1,11 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h1 class="title">{{ survey.title }} </h1>
+
+    <p class="is-size-4">{{ survey.created_at }}</p>
+
+    <p>{{ survey.short_description }}</p>
+
+    
+{% endblock %}

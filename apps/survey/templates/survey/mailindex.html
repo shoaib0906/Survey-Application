@@ -1,0 +1,178 @@
+{% extends 'core/base.html' %}
+{% block content %}
+    <section class="hero is-default is-light">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Sent Survey through E-mail
+          </h1>
+          <h2 class="subtitle">
+
+          </h2>
+        </div>
+      </div>
+    </section>
+    <hr>
+    <div id="mailsent-app">
+
+        <form method="post" v-on:submit="validateForm" >
+            {% csrf_token %}
+
+            {% if form.errors %}
+                {% for error in form.errors %}
+                    <div class="notification is-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="notification is-danger" v-if="errors.length">
+                <p v-for="error in errors">
+                    [[ error ]]
+                </p>
+            </div>
+        {% if messages %}
+          {% for msg in messages %}
+            <div class="notification is-danger">
+                {{msg.message}}
+            </div>
+          {% endfor %}
+        {% endif %}
+            <div class="columns">
+                <div class="column is-6">
+                    <div class="field">
+                <label>Select Survey (Category)</label>
+                <div class="contorl">
+                    <select name="survey_id" class="input " id="id_survey_id" v-model="survey_id">
+                        <option value="" selected="selected">Choose Survey</option>
+                        {% for survey in request.user.surveys.all %}
+                            <option value="{{ survey.id }}">{{ survey.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+                </div>
+                <div class="column is-6">
+                    <label>Mail</label>
+                    <div id="optiondiv">
+
+                        <div class="container" >
+                         <div class='element' id='div_1'>
+                             <input type='email' v-model="mail_id" placeholder='e-Mail address Please *'
+                                    class="input " name="mail_id" id='txt_1' >
+                             <br>{% comment %}<a class='add button  is-warning is-light'>Add More Option</a>{% endcomment %}
+                         </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <hr>
+            <div class="field ">
+                <div class="buttons has-addons is-right">
+                    <button type="submit" class="button is-success is-light ">Sent Mail </button>
+                </div>
+            </div>
+        </form>
+    </div><br>
+    <div class=" is-warning">
+          <div class="notification ">
+          Already Sent Mail::
+              <div class="">
+                {% for mail in mailsent %}
+                <div class="column is-12">
+                    <center>
+                        <small><i>Survey <b>{{ mail.survey_id }}</b> sent to this audience mail <b>{{ mail.mail_id }}</b></i></small>
+                    </center>
+                </div>
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+
+
+
+{% endblock %}
+{% block scripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+
+         // Add new element
+         $(".add").click(function(){
+
+          // Finding total number of elements added
+          var total_element = $(".element").length;
+
+          // last <div> with element class id
+          var lastid = $(".element:last").attr("id");
+          var split_id = lastid.split("_");
+          var nextindex = Number(split_id[1]) + 1;
+
+          var max = 10;
+          // Check total number elements
+          if(total_element < max ){
+           // Adding new div container after last occurance of element class
+           $(".element:last").after("<div class='element' id='div_"+ nextindex +"'></div>");
+
+           // Adding element to <div>
+           $("#div_" + nextindex).append("<br><input type='email'  placeholder='e-Mail address please' " +
+               "class=\"input \" required name=\"mail_id\" id='txt_"+ nextindex +"'>&nbsp;<span id='remove_" + nextindex + "' class='remove'>X</span>");
+
+          }
+
+         });
+
+         // Remove element
+         $('.container').on('click','.remove',function(){
+
+          var id = this.id;
+          var split_id = id.split("_");
+          var deleteindex = split_id[1];
+
+          // Remove <div> with id
+          $("#div_" + deleteindex).remove();
+
+         });
+        });
+    </script>
+
+    <script>
+    const SentMailApp = {
+        data() {
+            return {
+                survey_id: '',
+                mail_id: '',
+                errors: []
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+                this.errors = []
+
+                if (this.mail_id === '') {
+                    this.errors.push('Please insert a Mail Address')
+                }
+
+                if (this.survey_id === '') {
+                    this.errors.push('Please choose a survey from dropdown')
+                }
+
+
+                if (this.errors.length) {
+                    e.preventDefault()
+
+                    return false
+                } else {
+                    return true
+                }
+            }
+        }
+    }
+
+    Vue.createApp(SentMailApp).mount('#mailsent-app');
+</script>
+{% endblock %}

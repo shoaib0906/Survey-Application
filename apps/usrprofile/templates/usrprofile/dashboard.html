@@ -1,0 +1,92 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <section class="hero is-default is-light">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Dashboard
+          </h1>
+          <h2 class="subtitle">
+            Start Survey with Your One
+          </h2>
+        </div>
+      </div>
+    </section>
+    <hr>
+    {% if userprofile %}
+
+        {% for survey in request.user.surveys.all %}
+            {% if forloop.counter|divisibleby:4 or forloop.first %}
+                <div class="columns">
+            {% endif %}
+            <div class="column is-4">
+                <div class="card bg-warning" >
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-4">{{ survey.title }}</p>
+
+                                <p class="subtitle is-6">{{ survey.created_at }}</p>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            <!-- {{ survey.short_description }} -->
+
+                            <hr>
+                            <a href="{% url 'edit_survey' survey.id %}" class="button is-danger is-light pull-right">Delete </a>
+
+                            <a href="{% url 'edit_survey' survey.id %}" class="button is-default is-light pull-right">Edit </a>
+
+                            <a href="{% url 'show_questions' survey.id %}" class="button is-success is-light pull-right">Show</a>
+                            <a href="{% url 'add_question'  %}" class="button is-success is-light pull-right">Add Question</a>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+            {% if forloop.counter|divisibleby:3 %}
+                </div>
+            {% endif %}
+        {% empty %}
+            <p>You don't have any Survey ...</p>
+        {% endfor %}
+
+    {% else %}
+
+        {% for survey in surveys %}
+            {% if forloop.counter|divisibleby:5 or forloop.first %}
+                <div class="columns">
+            {% endif %}
+            <div class="column is-3">
+                <div class="card bg-warning" >
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-5">{{ survey.title|title   }}</p>
+
+                                <p class="subtitle">Author: {{ survey.created_by|title }} <br>{{ survey.created_at }}</p>
+
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            <!-- {{ survey.short_description }} -->
+
+                                <hr><a href="{% url 'answer_questions' survey.id %}" class="button is-success pull-right">Start Survey</a>
+                            <a href="{% url 'answer_questions' survey.id %}" class="button is-default pull-right">Show Result</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if forloop.counter|divisibleby:4 %}
+                </div>
+            {% endif %}
+        {% empty %}
+            <p>You don't have any question ...</p>
+        {% endfor %}
+
+    {% endif %}
+
+{% endblock %}

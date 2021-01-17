@@ -1,0 +1,177 @@
+
+{% extends 'core/base.html' %}
+{% block content %}
+        {% if alreadyanswer %}
+            <div class=" is-12" >
+            <div class="card is-light" style="background-color: #EBFFFC!important">
+                <div class="card-content">
+                    <div class="">
+                        <div class="is-success">
+                            <p class="title is-4"><b>Congratulations!!You have submitted this Survey.</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        {% endif %}
+
+    {% if alreadyanswer %}
+        {% for question in questions %}
+        {% if forloop.first %}
+        <div class=" is-12">
+            <div class="card bg-default">
+                <div class="card-content">
+                    <div class="">
+                        <div class="">
+                            <p class="title is-4"><b>{{ question.survey_id }}</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        {% endif %}
+        {% if messages %}
+          {% for msg in messages %}
+            <div class="notification is-success">
+                {{msg.message}}
+            </div>
+          {% endfor %}
+        {% endif %}
+        {% if forloop.counter|divisibleby:3 or forloop.first %}
+        <div class="columns">
+        {% endif %}
+
+        <div class="column is-6">
+                <div class="card bg-warning" >
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                Question # {{forloop.counter}} <br>
+                                <p class="subtitle is-6"><b> {{ question.title|title }}
+                                    </b></p>
+                                    <div class="form-check">
+                                      <label class="form-check-label">
+                                      {% for ans in answers %}
+
+                                          {% if ans.question_id|stringformat:"s" == question.title|stringformat:"s" %}
+
+                                              <p class="subtitle is-6"><b>Your Answer:
+                                                </b>{{ ans.answer_id }}</p>
+                                        {% endif %}
+                                      {% endfor %}
+
+                                      {% comment %}{% for ans in question.answer.answer_id %}
+                                        {% if ans.question_id|stringformat:"s" == question.title|stringformat:"s" %}
+                                            {{ ans.answer_id }} (Answer)
+                                            {{ ans.question_id }}{{ question.title }}
+                                        {% endif %}
+
+                                      {% endfor %}{% endcomment %}
+                                      </label>
+                                    </div>
+                                {% comment %}{% for opt in question.option_set.all %}
+                                    <div class="form-check">
+                                      <label class="form-check-label">
+
+                                          <input type="radio" name="answer[{{ question.id }}]" class="form-check-input"
+                                               value="{{ opt.id }}" required>  {{ opt.option|title }}
+
+                                      </label>
+                                    </div>
+                                {% endfor %}{% endcomment %}
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if forloop.counter|divisibleby:2  %}
+                </div>
+            {% endif %}
+        {% empty %}
+            <p>You Question is available for this Survey ...</p>
+    {% endfor %}
+    </div>
+    <div class="field">
+        <label>Audience Email </label>
+        <div class="control">
+            <input type="email" class="input" placeholder='Enter Email Address' disabled value="{{ answers.0.audience_email }}" name="audience_email" id="id_audience_email" required>
+        </div>
+    </div>
+    {% else %}
+    <form method="post">
+    {% csrf_token %}
+    {% for question in questions %}
+        {% if forloop.first %}
+        <div class=" is-12">
+            <div class="card bg-success">
+                <div class="card-content">
+                    <div class="">
+                        <div class="">
+                            <p class="title is-4"><b>{{ question.survey_id }}</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        {% endif %}
+
+        {% if forloop.counter|divisibleby:3 or forloop.first %}
+        <div class="columns">
+        {% endif %}
+
+        <div class="column is-6">
+                <div class="card bg-warning" >
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                Question # {{forloop.counter}} <br>
+                                <p class="subtitle is-6"><b> {{ question.title|title }}</b></p>
+
+                                <input type="hidden" name="question" class="form-check-input"
+                                               value="{{ question.id }}" >
+                                {% for opt in question.option_set.all %}
+                                    {% comment %}<ul class="list-group">
+                                      <li class="list-group-item"># {{ forloop.counter }} : {{ opt.option }}</li>
+
+                                    </ul>{% endcomment %}
+                                    <div class="form-check">
+                                      <label class="form-check-label">
+
+                                          <input type="radio" name="answer[{{ question.id }}]" class="form-check-input"
+                                               value="{{ opt.id }}" required>  {{ opt.option|title }}
+                                      </label>
+                                    </div>
+
+                                {% endfor %}
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if forloop.counter|divisibleby:2  %}
+                </div>
+            {% endif %}
+        {% empty %}
+            <p>You Question is available for this Survey ...</p>
+    {% endfor %}
+    </div>
+    <div class="field">
+        <label>Audience Email </label>
+        <div class="control">
+            <input type="email" class="input " placeholder='Enter Email Address' name="audience_email" id="id_audience_email" required>
+        </div>
+    </div>
+    <hr>
+    <div class="field ">
+        <div class="buttons has-addons is-right">
+            <button type="submit" class="button is-success is-light is-right">Submit Survey </button>
+        </div>
+    </div>
+    </form>
+    {% endif %}
+{% endblock %}
+

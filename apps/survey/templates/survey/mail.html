@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="post">
+    {% csrf_token %}
+    {% for question in questions %}
+        {% if forloop.first %}
+        <div class=" is-12">
+            <div class="card bg-success">
+                <div class="card-content">
+                    <div class="">
+                        <div class="">
+                            <p class="title"><b>
+                            Dear Audience,<br>
+                                We are requesting you to please fill this form and send back to our mail.
+                                Moreover you can fill in online website by visitng <a href="#" >Survey test</a> .
+                                <br>
+                                Survey Form:::{{ question.survey_id }}
+                            </b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        {% endif %}
+
+        {% if forloop.counter|divisibleby:3 or forloop.first %}
+        <div class="columns">
+        {% endif %}
+
+        <div class="column is-6">
+                <div class="card bg-warning" >
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                Question # {{forloop.counter}} <br>
+                                <p class="subtitle is-6"><b> {{ question.title|title }}</b></p>
+
+                                <input type="hidden" name="question" class="form-check-input"
+                                               value="{{ question.id }}" >
+                                {% for opt in question.option_set.all %}
+                                    {% comment %}<ul class="list-group">
+                                      <li class="list-group-item"># {{ forloop.counter }} : {{ opt.option }}</li>
+
+                                    </ul>{% endcomment %}
+                                    <div class="form-check">
+                                      <label class="form-check-label">
+
+                                          <input type="radio" name="answer[{{ question.id }}]" class="form-check-input"
+                                               value="{{ opt.id }}" required>  {{ opt.option|title }}
+                                      </label>
+                                    </div>
+
+                                {% endfor %}
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if forloop.counter|divisibleby:2  %}
+                </div>
+            {% endif %}
+        {% empty %}
+            <p>You Question is available for this Survey ...</p>
+    {% endfor %}
+    </div>
+    <div class="field">
+        <label>Audience Email </label>
+        <div class="control">
+            <input type="email" class="input " placeholder='Enter Email Address' name="audience_email" id="id_audience_email" required>
+        </div>
+    </div>
+    <hr>
+    <div class="field ">
+        <div class="buttons has-addons is-right">
+            <button type="submit" class="button is-success is-light is-right">Submit Survey </button>
+        </div>
+    </div>
+    </form>
+</body>
+</html>

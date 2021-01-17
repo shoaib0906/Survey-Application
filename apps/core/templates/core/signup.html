@@ -1,0 +1,144 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+    <div class="container col-12" id="signup-app">
+        <div class="columns">
+            <div class="column is-7">
+                <h1 class="title">Sign up</h1>
+                {% if form.errors %}
+                {% for error in form.errors %}
+                    <div class="notification is-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+                {% endif %}
+                <div class="notification is-danger" v-if="errors.length">
+                    <p v-for="error in errors">
+                        [[ error ]]
+                    </p>
+                </div>
+                <form method="post" v-on:submit="validateForm">
+                    {% csrf_token %}
+
+                    {% comment %}{{ form.as_p }}{% endcomment %}
+                    <div class="field">
+                        <label>User Name</label>
+
+                        <div class="control">
+                            <input name="username"  class="input" v-model="username" maxlength="150" autocapitalize="none"
+                                   autocomplete="username" autofocus  id="id_username">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Password</label>
+
+                        <div class="control">
+                            <input type="password" name="password1" v-model="password1"  class="input"
+                                   autocomplete="new-password"  id="id_password1">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Re-type Password</label>
+
+                        <div class="control">
+                            <input type="password" name="password2" v-model="password2" class="input"
+                                   autocomplete="new-password"  id="id_password2">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="field">
+                        <label>Account type</label>
+
+                        <div class="control">
+                            <div class="select">
+                                <select name="account_type" v-model="accounttype">
+                                    <option value="">Choose One</option>
+                                    <option value="user">User</option>
+                                    <option value="survery_publisher">Survey Publisher</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field ">
+                        <div class="buttons has-addons is-right">
+                            <button type="submit" class="button is-success is-light ">Sign up </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="column is-5">
+                <section class="hero is-success is-light">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Tips:<hr>
+          </h1>
+          <h2 class="subtitle">
+
+              <b class="title"><u>User name:</u></b>
+              <p>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</p><br>
+              <b class="title"><u>Password should be followed:</u></b><br>
+            Your password can’t be too similar to your other personal information.<br>
+            Your password must contain at least 8 characters.<br>
+            Your password can’t be a commonly used password.<br>
+            Your password can’t be entirely numeric.
+          </h2>
+        </div>
+      </div>
+    </section>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+
+    <script>
+    const SignupApp = {
+        data() {
+            return {
+                username: '',
+                password1: '',
+                password2: '',
+                accounttype:'',
+                errors: []
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+                this.errors = []
+
+                if (this.username === '') {
+                    this.errors.push('Enter a user name.')
+                }
+
+                if (this.password1 === '') {
+                    this.errors.push('Enter a Password.')
+                }
+                if (this.password2 === '') {
+                    this.errors.push('Enter a Re-type Password.')
+                }
+                if (this.accounttype === '') {
+                    this.errors.push('Please enter your account type.')
+                }
+
+
+
+                if (this.errors.length) {
+                    e.preventDefault()
+
+                    return false
+                } else {
+                    return true
+                }
+            }
+        }
+    }
+
+    Vue.createApp(SignupApp).mount('#signup-app');
+</script>
+{% endblock %}

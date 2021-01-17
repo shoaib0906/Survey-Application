@@ -1,0 +1,56 @@
+
+{% extends 'core/base.html' %}
+{% block content %}
+   <div class="colums">
+    {% for question in questions %}
+        {% if forloop.first %}
+        <div class="column is-12">
+            <div class="card bg-default">
+                <div class="card-content">
+                    <div class="">
+                        <div class="">
+                            <p class="title is-4"><b>{{ question.survey_id }}</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="column is-6">
+                <div class="card bg-warning" >
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                Question # {{forloop.counter}} <br>
+                                <p class="subtitle is-6"><b> {{ question.title|title }}</b></p>
+
+                                
+                                {% for opt in question.option_set.all %}
+                                    <ul class="list-group">
+                                      <li class="list-group-item"># {{ forloop.counter }} : {{ opt.option }}</li>
+
+                                    </ul>
+                                    {% comment %}<div class="form-check">
+                                      <label class="form-check-label">
+                                        <input type="radio" name="option" class="form-check-input"
+                                               value="{{ opt.option }}">  {{ opt.option }}
+                                      </label>
+                                    </div>{% endcomment %}
+
+                                {% endfor %}
+
+                            <div class="field ">
+                                <div class="buttons has-addons is-right">
+                                    <a href="{% url 'edit_question' question.id %}" class="button is-success is-light pull-right">Edit Question</a>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>You Question is available for this Survey ...</p>
+    {% endfor %}
+    </div>
+{% endblock %}

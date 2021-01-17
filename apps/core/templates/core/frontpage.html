@@ -1,0 +1,58 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    
+    <section class="hero is-default">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Survey
+          </h1>
+          <h2 class="subtitle">
+            We have used FreeOnlineSurveys.com for 3 years to collate feedback from our customers on the email service we provide. The website is easy to navigate and as an end user I found it very efficient when pulling results weekly and monthly.
+          </h2>
+        </div>
+      </div>
+    </section><hr>
+
+        {% for survey in surveys %}
+            {% if forloop.counter|divisibleby:4 or forloop.first %}
+                <div class="columns">
+            {% endif %}
+            <div class="column is-4">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="media is-warning is-light" >
+                            <div class="media-content">
+                               <p class="title is-5">{{ survey.title|title   }}</p>
+                                <p class="subtitle">Author: {{ survey.created_by|title }} <br>{{ survey.created_at }}</p>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            <p class="subtitle">{{ survey.short_description|slice:":20" }} ...</p>
+
+                            <hr>
+
+                            <a href="{% url 'survey_detail' survey.id %}" class="button is-danger is-light pull-right">View Details</a>
+                            {% if request.user.userprofile.is_employee %}
+                            {% else %}
+                                {% if request.user.userprofile.is_employer == 'False' %}
+
+                                <a href="{% url 'answer_questions' survey.id %}" class="button is-success is-light pull-right">Start Survey</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if forloop.counter|divisibleby:3  %}
+                </div>
+            {% endif %}
+            {% empty %}
+            <p>You Survey available...</p>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}

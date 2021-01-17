@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <section class="hero is-default is-light">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Survey Create
+          </h1>
+          <h2 class="subtitle">
+            Create new Survey with short description to Focus about questionary about which subject
+          </h2>
+        </div>
+      </div>
+    </section>
+    <hr>
+    <div id="add-survey-app">
+
+
+        <form method="post" v-on:submit="validateForm">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                {% for error in form.errors %}
+                    <div class="notification is-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="notification is-danger" v-if="errors.length">
+                <p v-for="error in errors">
+                    [[ error ]]
+                </p>
+            </div>
+            <div class="field">
+                <label>Survey Title(Category)</label>
+                <div class="control">
+                    <input type="text" class="input" v-model="title" name="title" id="id_title">
+                </div>
+            </div>
+            <div class="field">
+                <label>Short Description</label>
+                <div class="control">
+                    <textarea type="text" class="textarea" v-model="short_description" name="short_description"
+                              id="id_short_description"></textarea>
+                </div>
+            </div>
+            <hr>
+            <div class="field ">
+                <div class="buttons has-addons is-right">
+                    <button type="submit" class="button is-success is-light ">Create New Survey </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block scripts %}
+
+    <script>
+    const AddSurveyApp = {
+        data() {
+            return {
+                short_description: '',
+                title: '',
+                errors: []
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+                this.errors = []
+
+                if (this.title === '') {
+                    this.errors.push('Survey Title is missing ! Please write survey title')
+                }
+
+                if (this.short_description === '') {
+                    this.errors.push('Please write a short description')
+                }
+
+
+
+                if (this.errors.length) {
+                    e.preventDefault()
+
+                    return false
+                } else {
+                    return true
+                }
+            }
+        }
+    }
+
+    Vue.createApp(AddSurveyApp).mount('#add-survey-app');
+</script>
+{% endblock %}

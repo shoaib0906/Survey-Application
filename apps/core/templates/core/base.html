@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <!-- Meta -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Title -->
+        <title> Survey Management</title>
+
+        <!-- Styles -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+
+    </head>
+
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar is-light">
+            <div class="navbar-brand">
+                <a href="{% url 'frontpage' %}" class="navbar-item"><strong> Survey Management</strong></a>
+            </div>
+
+            <div class="navbar-menu">
+                <div class="navbar-end">
+
+
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="navbar-item">Dashboard</a>
+                        {% if request.user.userprofile.is_employer %}
+                            <a href="{% url 'index_survey' %}" class="navbar-item">Survey</a>
+                            <a href="{% url 'index_question' %}" class="navbar-item">Questionnaire</a>
+                            <a href="{% url 'mailsent' %}" class="navbar-item">Dispatch Servey</a>
+                        {% endif %}
+                        {% comment %}<a href="{% url 'notifications' %}" class="navbar-item">Notifications ({{ notifications.count }})</a>{% endcomment %}
+                    {% endif %}
+
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            {% if request.user.is_authenticated %}
+                                <a href="{% url 'logout' %}?next=/" class="button is-danger is-light">Log out</a>
+                            {% else %}
+                                <a href="{% url 'signup' %}" class="button is-success"><strong>Sign up </strong></a>
+                                <a href="{% url 'login' %}" class="button is-light ">Log in</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+
+        <!-- Main content -->
+        <section class="section">
+            {% block content %}
+            {% endblock %}
+        </section>
+        <!-- End Main content -->
+
+        <!-- Scripts -->
+        <script src="https://unpkg.com/vue@next"></script>
+        {% load static %}
+       {% comment %} <link rel="stylesheet" href="{% static '/css/jquery.toastmessage.css'%}">
+        <script src="{% static '/js/jquery.toastmessage.js'%}"></script>{% endcomment %}
+
+       {% comment %} <link type="text/css" href="http://akquinet.github.io/jquery-toastmessage-plugin/demo/css/jquery.toastmessage-min.css" rel="stylesheet"/>
+        <script type="text/javascript" src="http://akquinet.github.io/jquery-toastmessage-plugin/demo/jquery.toastmessage-min.js"></script>
+        <script type="text/javascript" src="http://akquinet.github.io/jquery-toastmessage-plugin/demo/jquery-1.5.min.js"></script>
+        {% endcomment %}
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <script type="text/javascript">
+          $(document).ready( function() {
+            $('.notification').delay(4000).fadeOut();
+          });
+        </script>
+        {% block scripts %}
+        {% endblock %}
+    </body>
+<footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      <strong>Demo Company</strong>   <small>&copy; Copyright 2021, Survey Website</small>
+    </p>
+  </div>
+</footer>
+</html>

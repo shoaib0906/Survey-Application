@@ -1,0 +1,82 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    {% for survey in surveys %}
+    <div class="hiro" id="question_delete_app">
+        <div class=" is-warning">
+          <div class="notification ">
+
+              <div class="columns">
+                <div class="column is-12">
+                    <center><b>{{ survey.title|title }}</b><br>
+                        <small><i>Author:{{ survey.created_by|title }}</i></small>
+                    </center>
+                </div>
+
+            </div>
+          </div>
+        </div><br>
+        {% for ques in survey.questions.all %}
+        {% if forloop.counter|divisibleby:3 or forloop.first %}
+        <div class="columns">
+        {% endif %}
+            <div class="column is-6">
+            <div class="notification is-default">
+                <h1 class="title is-small">Question # {{ forloop.counter }}</h1>
+                <h5 class="subtitle">{{ ques.title }}</h5>
+
+                {% for opt in ques.option_set.all %}
+                   # {{ forloop.counter }}. {{ opt.option|title }} <br>
+                {% endfor %}
+                <hr>
+                {% for an in ques.answer_set.all %}
+                   {{ an.created_by|title }} {{ an.audience_email|title }} : <b>{{ an.answer_id|title }}</b><br>
+                {% endfor %}<br>
+
+                    <script>
+                        window.onload = function () {
+                        var ctx = document.getElementById("chartContainer{{ques.id}}").getContext("2d");
+                        var chart = new CanvasJS.Chart(ctx, {
+                            animationEnabled: true,
+                            theme: "light1", // "light1", "light2", "dark1", "dark2"
+                            title:{
+                                text: "Report"
+                            },
+                            axisY: {
+                                title: "Number of Choose"
+                            },
+                            data: [{
+                                type: "column",
+                                showInLegend: true,
+                                legendMarkerColor: "grey",
+                                legendText: "Option's",
+                                dataPoints: [
+                                    { y: 300878, label: "Venezuela" },
+                                    { y: 266455,  label: "Saudi" },
+                                    { y: 169709,  label: "Canada" },
+                                    { y: 158400,  label: "Iran" },
+
+                                ]
+                            }]
+                        });
+                        chart.render();
+
+                        }
+                        </script>
+            </div>
+            </div>
+            {% if forloop.counter|divisibleby:2  %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+
+
+        </div><br>
+    {% endfor %}
+
+{% endblock %}
+{% block scripts %}
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+{% endblock %}
