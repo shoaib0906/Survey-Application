@@ -20,6 +20,13 @@ from django.contrib.auth import views
 from apps.core.views import frontpage,signup,accountred
 from apps.survey.views import survey_detail,add_survey
 from apps.usrprofile.views import dashboard
+from apps.survey.views import SurveyApiView
+from rest_framework import routers
+from django.urls import include
+from django.conf.urls import url
+
+router = routers.DefaultRouter()
+
 
 urlpatterns = [
     path('', frontpage, name='frontpage'),
@@ -32,6 +39,6 @@ urlpatterns = [
     path('question/',include('apps.question.urls')),
     path('dashboard/',include('apps.usrprofile.urls')),
     path('surveys/',include('apps.survey.urls')),
-
+    url("surveyapi/",SurveyApiView.as_view()),
 
 ]
