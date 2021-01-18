@@ -30,7 +30,7 @@ Application Build with a lots more concentration to give a publisher easy Survey
 - Just Login and submit any Survey.
 - Result Showing Facility for user to check in future about their Answer.
 
-<img src="https://github.com/shoaib0906/Survey-Application/blob/main/E-Rdiagram-1.jpg" height=400px width="800"/>
+<img src="https://github.com/shoaib0906/Survey-Application/blob/main/E-Rdiagram-1.jpg" height=600px width="800"/>
 
 <img src="https://github.com/shoaib0906/Survey-Application/blob/main/1610895407390.png" height=400px width="800"/>
 
