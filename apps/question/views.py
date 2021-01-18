@@ -37,7 +37,7 @@ def delete_question(request, question_id):
     surveys = Question.objects.filter(created_by=request.user,id=question_id).delete()
     surveys = Survey.objects.filter(created_by=request.user)
     messages.success(request, 'Question deleted successfully.')
-    return render(request, 'question/index.html', {'surveys': surveys})
+    return redirect('index_question')
 
 @login_required
 def show_questions(request,survey_id):

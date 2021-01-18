@@ -33,7 +33,7 @@ class SurveyApiView(APIView):
 def delete_survey(request, survey_id):
     surveys = Survey.objects.filter(created_by=request.user,id=survey_id).delete()
     messages.success(request, 'Survey Deleted Successfully')
-    return render(request, 'survey/index.html', {'surveys': surveys})
+    return redirect('index_survey')
 
 @login_required
 def mailsend(request):

@@ -22,7 +22,13 @@
       </div>
     </section>
     <hr>
-
+    {% if messages %}
+          {% for msg in messages %}
+            <div class="notification is-success" id="notification123">
+                {{msg.message}}
+            </div>
+          {% endfor %}
+        {% endif %}
     {% for survey in surveys %}
     <div class="hiro" id="question_delete_app">
         <div class=" is-warning">
@@ -42,13 +48,7 @@
             </div>
           </div>
         </div><br>
-        {% if messages %}
-          {% for msg in messages %}
-            <div class="notification123 is-success">
-                {{msg.message}}
-            </div>
-          {% endfor %}
-        {% endif %}
+
         <table id="example" class="table is-striped" style="width:100%">
             <thead>
                 <tr>
