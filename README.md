@@ -62,7 +62,7 @@ After - $ python manage.py runserver you can access a simple REST-API which is i
 
 - http://127.0.0.1:8000/surveyapi/
 
-<img src="https://github.com/shoaib0906/Survey-Application/blob/main/api.png" height=600px width="800"/>
+<img src="https://github.com/shoaib0906/Survey-Application/blob/main/api.png" height=600px width="1000"/>
 
 
 
