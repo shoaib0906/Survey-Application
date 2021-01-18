@@ -67,7 +67,7 @@ After - $ python manage.py runserver you can access a simple REST-API which is i
 
 ## Report
 
-<img src="https://github.com/shoaib0906/Survey-Application/blob/main/report.png" height=600px width="1000"/>
+<img src="https://github.com/shoaib0906/Survey-Application/blob/main/report.png" height=600px width="700"/>
 
 
 ## Code of Conduct
