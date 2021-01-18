@@ -56,7 +56,7 @@ For Run this Application:(dev env -Pycharm,Django 3.1,Python-3.7.7,SQLITE)
 - $ python manage.py migrate
 - $ python manage.py runserver
 
-##REST-API::
+## REST-API::
 
 After - $ python manage.py runserver you can access a simple REST-API which is integrated in this application from 
 
@@ -64,6 +64,10 @@ After - $ python manage.py runserver you can access a simple REST-API which is i
 
 <img src="https://github.com/shoaib0906/Survey-Application/blob/main/api.png" height=600px width="1000"/>
 
+
+## Report
+
+<img src="https://github.com/shoaib0906/Survey-Application/blob/main/report.png" height=600px width="1000"/>
 
 
 ## Code of Conduct
